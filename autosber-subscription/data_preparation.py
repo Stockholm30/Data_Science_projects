@@ -102,3 +102,49 @@ data_hits_messy['purpose_action'] = new_actions
 data_hits_messy['len_link']=data_hits_messy['hit_page_path'].apply(len)
 data_hits_messy.to_csv(PROCESSED_DIR2 +'/'+ "data_hits_clean.csv",  index=False)
 
+#DATA_SESSIONS (Nan-cleaning)
+#it is possible to determine the operating system by brand and device category
+#There is no clear connection
+#it is easier to fill in the gaps by the top value
+oses_data = data_sessions_messy[data_sessions_messy['device_os'].notna()]
+nan_os_data = data_sessions_messy[data_sessions_messy['device_os'].isna()]brands = list(set(nan_os_data.device_brand.tolist()))
+brands= brands[1:]
+data_sessions_new=pd.DataFrame()
+for i in range(len(brands)):
+    brand_data = nan_os_data[nan_os_data['device_brand'].isin([brands[i]])]
+    brand_oses = oses_data[oses_data['device_brand'].isin([brands[i]])]
+    if len(brand_oses)>0:
+        brand_data['device_os'].fillna(brand_oses['device_os'].mode()[0], inplace=True)
+        data_sessions_new = pd.concat([data_sessions_new, brand_data])
+    else:
+        data_sessions_new = pd.concat([data_sessions_new, brand_data])
+        
+nan_brands = nan_os_data[nan_os_data['device_brand'].isna()]
+data_sessions_vers_temp=pd.concat([nan_brands, data_sessions_new])
+data_sessions_vers1=pd.concat([data_sessions_vers_temp, oses_data])
+#fill in the remaining fields of NaN brand with the most popular value
+#There are NaN values for columns utm_campaign, utm_source, utm_adcontent  
+#utm_source can be filled in by utm_campaign
+utm_source_nan = data_sessions_vers1[data_sessions_vers1['utm_source'].isna()]
+utm_source_data = data_sessions_vers1[data_sessions_vers1['utm_source'].notna()]
+camps = list(set(utm_source_nan.utm_campaign.tolist()))
+
+nan_data_source=pd.DataFrame()
+for i in range(len(camps)):
+    camp_data = utm_source_nan[utm_source_nan['utm_campaign'].isin([camps[i]])]
+    camp_source = utm_source_data[utm_source_data['utm_campaign'].isin([camps[i]])]
+    
+    camp_data['utm_source'].fillna(camp_source['utm_source'].mode()[0], inplace=True)
+    nan_data_source = pd.concat([nan_data_source, camp_data])
+    
+data_sessions_vers2 = pd.concat([nan_data_source, utm_source_data])
+#utm_adcontent cannot be determined unambiguously, I will take the top value
+data_sessions_vers2['utm_adcontent'].fillna(data_sessions_vers2['utm_adcontent'].mode()[0], inplace=True)
+data_sessions_vers2['device_brand'].fillna(data_sessions_vers2['device_brand'].mode()[0], inplace=True)
+data_sessions_vers2['device_os'].fillna('other', inplace=True)
+data_sessions_vers2['utm_campaign'].fillna('other', inplace=True)
+data_sessions_clean= data_sessions_vers2[['utm_source', 'utm_medium', 'utm_campaign', 'utm_adcontent', 'device_category', 
+                                          'device_os', 'device_os', 'device_brand', 'device_screen_resolution', 
+                                          'device_browser', 'geo_country', 'geo_city']]
+
+data_sessions_clean.to_csv(PROCESSED_DIR2 +'/'+ "data_sessions_clean.csv",  index=False) 
