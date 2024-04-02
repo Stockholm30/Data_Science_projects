@@ -57,7 +57,7 @@ for i in range(len(dates)):
         days.append('saturday')
     elif(datetime.weekday(day) == 6):
         days.append('sunday')
-data_hits['day_of_week'] = days
+data_hits_messy['day_of_week'] = days
 
 month= []
 for i in range(len(dates)):
@@ -100,5 +100,5 @@ for i in range(len(actions)):
 data_hits_messy['purpose_action'] = new_actions 
 #new feature
 data_hits_messy['len_link']=data_hits_messy['hit_page_path'].apply(len)
-data_hits_messy.to_csv(os.path.join(settings.PROCESSED_DIR2, "data_hits_clean.csv",  index=False)
+data_hits_messy.to_csv(PROCESSED_DIR2 +'/'+ "data_hits_clean.csv",  index=False)
 
