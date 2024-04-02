@@ -33,9 +33,7 @@ SELECT = {
 
 def concatenate(prefix="ga_hits"):
     file = os.listdir(settings.DATA_DIR)
-  
-
-    data = pd.read_csv(os.path.join(settings.DATA_DIR, file[0]), sep=",", header=None, names=HEADERS[prefix], index_col=False)
+    data = pd.read_csv(os.path.join(settings.DATA_DIR, file[0]), sep=",", header=None, names=HEADERS[prefix])[1:]
     data = data[SELECT[prefix]]
     data.to_csv(os.path.join(settings.PROCESSED_DIR, "{}.csv".format(prefix)), sep=",", index=False)
 
