@@ -32,19 +32,12 @@ SELECT = {
 
 
 def concatenate(prefix="ga_hits"):
-    files = os.listdir(settings.DATA_DIR)
-    full = []
-    for f in files:
-        if not f.startswith(prefix):
-            continue
+    file = os.listdir(settings.DATA_DIR)
+  
 
-        data = pd.read_csv(os.path.join(settings.DATA_DIR, f), sep=",", header=None, names=HEADERS[prefix], index_col=False)
-        data = data[SELECT[prefix]]
-        full.append(data)
-
-    full = pd.concat(full, axis=0)
-
-    full.to_csv(os.path.join(settings.PROCESSED_DIR, "{}.csv".format(prefix)), sep=",", header=SELECT[prefix], index=False)
+    data = pd.read_csv(os.path.join(settings.DATA_DIR, file[0]), sep=",", header=None, names=HEADERS[prefix], index_col=False)
+    data = data[SELECT[prefix]]
+    data.to_csv(os.path.join(settings.PROCESSED_DIR, "{}.csv".format(prefix)), sep=",", index=False)
 
 if __name__ == "__main__":
     concatenate("ga_hits")
