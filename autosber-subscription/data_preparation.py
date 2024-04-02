@@ -143,8 +143,5 @@ data_sessions_vers2['utm_adcontent'].fillna(data_sessions_vers2['utm_adcontent']
 data_sessions_vers2['device_brand'].fillna(data_sessions_vers2['device_brand'].mode()[0], inplace=True)
 data_sessions_vers2['device_os'].fillna('other', inplace=True)
 data_sessions_vers2['utm_campaign'].fillna('other', inplace=True)
-data_sessions_clean= data_sessions_vers2[['utm_source', 'utm_medium', 'utm_campaign', 'utm_adcontent', 'device_category', 
-                                          'device_os', 'device_os', 'device_brand', 'device_screen_resolution', 
-                                          'device_browser', 'geo_country', 'geo_city']]
 
-data_sessions_clean.to_csv(PROCESSED_DIR2 +'/'+ "data_sessions_clean.csv",  index=False) 
+data_sessions_vers2.to_csv(PROCESSED_DIR2 +'/'+ "data_sessions_clean.csv",  index=False) 
