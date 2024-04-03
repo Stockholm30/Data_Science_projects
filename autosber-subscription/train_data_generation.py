@@ -106,6 +106,11 @@ def read():
     data_hits = pd.read_csv(settings.PROCESSED_DIR2+'/'+'data_hits_clean.csv')
     return data_hits, data_sessions
 
+if __name__ == "__main__":
+    data = read()
+    train_result = annotate(data[0], data[1])
+  
+
 
 
 
