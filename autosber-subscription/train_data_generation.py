@@ -108,7 +108,7 @@ def read():
 
 if __name__ == "__main__":
     data = read()
-    train_result = annotate(data[0], data[1])
+    train_result = train_composition(data[0], data[1])
   
 
 
