@@ -10,13 +10,14 @@ from sklearn.model_selection import cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.svm import SVC
+import settings
 
 
 def main():
     # Use a breakpoint in the code line below to debug your script.
     print('Sbersubscription Prediction Pipeline')  # Press ⌘F8 to toggle the breakpoint.
 
-    df = pd.read_csv('sberauto_train_data')
+    df = pd.read_csv(settings.PROCESSED_DIR2+'/'+'sberauto_train_data.csv')
     x = df.drop(['purpose_action'], axis=1)
     y = df['purpose_action']
 
