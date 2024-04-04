@@ -12,9 +12,9 @@ def train_composition(data_1, data_2):
        'device_screen_resolution', 'device_browser', 'geo_country',
        'geo_city', 'purpose_action']]
   train_data = train_data2.drop_duplicates()
-  def get_month_1(x):
-    return (x.month)
-  train_data['month']=train_data['visit_date'].apply(get_month_1)
+  def get_month(x):
+    return (int(x.split('-')[1]))
+  train_data['month']=train_data['visit_date'].apply(get_month)
   months = [5, 6, 7, 8, 9, 10, 11, 12]
   features_important=['utm_source', 'utm_campaign', 'utm_adcontent', 'device_screen_resolution', 'device_brand' , 'geo_city',
                    'geo_country']
