@@ -14,3 +14,8 @@ The customer pays a fixed monthly payment and gets to use the car for a period o
 ## Install the requirements
 - Install the requirements using `pip install -r requirements.txt`.
 ## Usage
+- Run `mkdir processed` to create a directory for our processed datasets.
+- Run `mkdir clean_data` to create a directory for our clean datasets.
+- Run `python assemble.py` and after that `python data_preparation.py` to clean the datasets for train data generation.
+  - This will create `data_sessions_clean.csv` and `data_hits_clean.csv` in the `clean_data` folder. 
+- 
