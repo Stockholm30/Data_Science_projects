@@ -18,4 +18,8 @@ The customer pays a fixed monthly payment and gets to use the car for a period o
 - Run `mkdir clean_data` to create a directory for our clean datasets.
 - Run `python assemble.py` and after that `python data_preparation.py` to clean the datasets for train data generation.
   - This will create `data_sessions_clean.csv` and `data_hits_clean.csv` in the `clean_data` folder. 
-- 
+- Run `python train_data_generation.py`.
+  - This will create training data from `data_sessions_clean.csv` and `data_hits_clean.csv`.
+  - It will add a file called `sberauto_train_data.csv` to the `clean_data` folder.
+- Run `python pipeline.py`.
+  - This will run cross validation across the training set, and print the accuracy score.
