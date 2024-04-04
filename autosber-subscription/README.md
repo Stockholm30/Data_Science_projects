@@ -10,3 +10,7 @@ The customer pays a fixed monthly payment and gets to use the car for a period o
 - Switch into the data directory using `cd data`.
 - Download the data files from autosber-subscription into the `data` directory.
   - You can find the data [here](https://drive.google.com/file/d/1iW0GBTox3BMdn_kRiH88LIIj_OCp-3zI/view?usp=drive_link) and [here](https://drive.google.com/file/d/1YK_SOKFXhLaWdgdQglLxEoAsOMCA7M4x/view?usp=drive_link).
+- Switch back into the `autosber-subscription` directory using `cd ..`.
+## Install the requirements
+- Install the requirements using `pip install -r requirements.txt`.
+## Usage
