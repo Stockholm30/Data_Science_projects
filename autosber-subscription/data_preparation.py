@@ -107,7 +107,8 @@ data_hits_messy.to_csv(PROCESSED_DIR2 +'/'+ "data_hits_clean.csv",  index=False)
 #There is no clear connection
 #it is easier to fill in the gaps by the top value
 oses_data = data_sessions_messy[data_sessions_messy['device_os'].notna()]
-nan_os_data = data_sessions_messy[data_sessions_messy['device_os'].isna()]brands = list(set(nan_os_data.device_brand.tolist()))
+nan_os_data = data_sessions_messy[data_sessions_messy['device_os'].isna()]
+brands = list(set(nan_os_data.device_brand.tolist()))
 brands= brands[1:]
 data_sessions_new=pd.DataFrame()
 for i in range(len(brands)):
