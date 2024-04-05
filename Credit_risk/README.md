@@ -4,6 +4,7 @@ This work is devoted to predicting the probability of default of customers who t
 ### Download the data
 - Clone this repo to your computer.
 - Get into the folder using `cd Credit_risk`.
-- Run `mkdir data`.
-- Download the data files with client unformation into the `data` directory.
+- Run `mkdir processed`.
+- Download the data files with client unformation.
   - You can find the data [here](https://drive.google.com/drive/folders/14npslKbipCFP5A9b-Tf46TUys6WaQgGY?usp=drive_link).
+## Usage
