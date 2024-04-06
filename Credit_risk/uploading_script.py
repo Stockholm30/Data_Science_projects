@@ -111,8 +111,9 @@ def prepare_transactions_dataset(path_to_dataset: str, num_parts_to_preprocess_a
                 preprocessed_frames.append(reduced_data)
             return pd.concat(preprocessed_frames)
 
-
+targets = pd.read_csv('target_data/train_target.csv')
 data_all = prepare_transactions_dataset(path, num_parts_to_preprocess_at_once=1, num_parts_total=12,
                                                save_to_path='train_data_/')
-data_all.to_csv('processed/prepared_data')
+prepared_data  = data_all.merge(targets, left_on='id', right_on='id')
+prepared_data.to_csv('processed/prepared_data')
        
