@@ -114,5 +114,5 @@ def prepare_transactions_dataset(path_to_dataset: str, num_parts_to_preprocess_a
 
 data_all = prepare_transactions_dataset(path, num_parts_to_preprocess_at_once=1, num_parts_total=12,
                                                save_to_path='train_data_/')
-data_all.to_csv('processed/data_test')
+data_all.to_csv('processed/prepared_data')
        
