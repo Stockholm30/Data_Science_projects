@@ -5,7 +5,7 @@ This work is devoted to predicting the probability of default of customers who t
 - Clone this repo to your computer.
 - Get into the folder using `cd Credit_risk`.
 - Run `mkdir processed`.
-- Run `target_data`.
+- Run `mkdir target_data`.
 - Switch into the `target_data` directory using `cd target_data`.
 - Download the data files with targets [here].
 - Run `../` to return in `Credit_risk` folder.
