@@ -3,8 +3,8 @@ import pandas as pd
 import joblib
 
 def main():
-    model = joblib.load('model/credit_risk_pipe.pkl')
-    data_test = pd.read_csv('model/X_test_examples')
+    model = joblib.load('credit_risk_pipe.pkl')
+    data_test = pd.read_csv('X_test_examples')
     data_test.pop('Unnamed: 0')
     test_res=[]
    # data_test = data_test[0:10]
