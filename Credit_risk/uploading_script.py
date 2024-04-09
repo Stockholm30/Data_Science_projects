@@ -89,8 +89,8 @@ def main():
                         reduced_data.loc[is_outlier_1, features_type_change[i]] = int(boundaries[0])
                         reduced_data.loc[is_outlier_2, features_type_change[i]] = int(boundaries[1])
 
-                #for i in range(len(features_type_change)):
-                 #   reduced_data[features_type_change[i]] = reduced_data[features_type_change[i]].astype('int')
+                for i in range(len(features_type_change)):
+                    reduced_data[features_type_change[i]] = reduced_data[features_type_change[i]].astype('int')
 
                 # записываем подготовленные данные в файл
                 if save_to_path:
