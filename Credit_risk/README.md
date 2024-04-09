@@ -16,3 +16,4 @@ This work is devoted to predicting the probability of default of customers who t
   - Data preprocessing is explained in notebooks : cleaning-credit_data.ipynb, EDA_credit_data.ipynb, modeling_default_prediction.ipynb
   - This will create prepared dara in the `processed` folder.
 -  Run `python prediction.py` to obtain file of pkl format for predictions.
+-  Run `python predictions.py` to obtain `predictions.csv` with predictions  on the test data.
