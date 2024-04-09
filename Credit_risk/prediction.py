@@ -39,7 +39,7 @@ numeric_transformer = Pipeline(steps=[
 preprocessor = ColumnTransformer(transformers=[
             ("num_transform", numeric_transformer, numeric_features)
         ])
-pipe = Pipeline(steps=[("preprocesser", preprocessor), ("classifier", DecisionTreeClassifier())])
+pipe = Pipeline(steps=[("preprocessor", preprocessor), ("classifier", DecisionTreeClassifier())])
 model =  pipe.fit(X_train, y_train)
 predicted_target = model.predict(X_test)
 score = roc_auc_score(predicted_target,y_test)
