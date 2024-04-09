@@ -4,7 +4,11 @@ import os
 import pandas as pd
 import tqdm
 
-def read_parquet_dataset_from_local(path_to_dataset: str, start_from: int = 0,
+def main():
+
+        print('Pipeline Credit Risk')
+        path = 'train_data_/'
+        def read_parquet_dataset_from_local(path_to_dataset: str, start_from: int = 0,
                                         num_parts_to_read: int = 2, columns=None, verbose=False) -> pd.DataFrame:
 
             res = []
@@ -25,7 +29,7 @@ def read_parquet_dataset_from_local(path_to_dataset: str, start_from: int = 0,
 
             return pd.concat(res).reset_index(drop=True)
 
-def prepare_transactions_dataset(path_to_dataset: str, num_parts_to_preprocess_at_once: int = 1,
+        def prepare_transactions_dataset(path_to_dataset: str, num_parts_to_preprocess_at_once: int = 1,
                                      num_parts_total: int = 50,
                                      save_to_path=None, verbose: bool = False):
 
@@ -34,29 +38,17 @@ def prepare_transactions_dataset(path_to_dataset: str, num_parts_to_preprocess_a
             for step in tqdm.tqdm_notebook(range(0, num_parts_total, num_parts_to_preprocess_at_once),
                                        desc="Transforming transactions data"):
                 transactions_frame = read_parquet_dataset_from_local(path_to_dataset, step
-                                                                 , num_parts_to_preprocess_at_once, columns=['id','pre_since_opened',
-       'is_zero_loans5', 'is_zero_loans530', 'is_zero_loans3060',
-       'is_zero_loans6090', 'is_zero_loans90', 'is_zero_util',
-       'is_zero_over2limit', 'is_zero_maxover2limit', 'pclose_flag',
-       'fclose_flag',  'enc_paym_6',
-       'enc_paym_7', 'enc_paym_8', 'enc_paym_9', 'enc_paym_10', 'enc_paym_11',
-       'enc_paym_12', 'enc_paym_13', 'enc_paym_14'],
-                                                                 verbose=verbose)
+                                                                 , num_parts_to_preprocess_at_once, columns=
+                                                                     None , verbose=verbose)
 
-          # data preprocessing
+            # здесь должен быть препроцессинг данных
 
                 agg_func_count_application = {
-                              'pre_since_opened':'mean',
-                              'is_zero_loans5':'max',
-                              'is_zero_loans530':'max',
-                              'is_zero_loans3060':'max',
-                              'is_zero_loans6090':'max',
-                              'is_zero_loans90':'max',
-                               'is_zero_util':'max',
-                              'is_zero_over2limit':'max',
-                               'is_zero_maxover2limit':'max',
-                              'pclose_flag':'max',
-                               'fclose_flag':'max',
+                              'pre_fterm':'mean',
+                              'pre_till_fclose':'max',
+                              'pre_loans_credit_cost_rate':'median',
+                              'pre_util':'max',
+                               'enc_paym_5':'max',
                               'enc_paym_6':'median',
                               'enc_paym_7':'median',
                             'enc_paym_8':'median',
@@ -70,16 +62,6 @@ def prepare_transactions_dataset(path_to_dataset: str, num_parts_to_preprocess_a
                               }
 
                 reduced_data = transactions_frame.groupby(['id']).agg(agg_func_count_application)
-                reduced_data["enc_paym_6"] = reduced_data['enc_paym_6'].astype('int')
-                reduced_data["enc_paym_7"] = reduced_data['enc_paym_7'].astype('int')
-                reduced_data["enc_paym_8"] = reduced_data['enc_paym_8'].astype('int')
-                reduced_data["enc_paym_9"] = reduced_data['enc_paym_9'].astype('int')
-                reduced_data["enc_paym_10"] = reduced_data['enc_paym_10'].astype('int')
-                reduced_data["enc_paym_11"] = reduced_data['enc_paym_11'].astype('int')
-                reduced_data["enc_paym_12"] = reduced_data['enc_paym_12'].astype('int')
-                reduced_data["enc_paym_13"] = reduced_data['enc_paym_13'].astype('int')
-                reduced_data["enc_paym_14"] = reduced_data['enc_paym_14'].astype('int')
-
 
                 def calculate_outliers(data):
                     q25 = data.quantile(0.25)
@@ -89,17 +71,28 @@ def prepare_transactions_dataset(path_to_dataset: str, num_parts_to_preprocess_a
                     boundaries = (q25 - 1.5 * iqr, q75 + 1.5 * iqr)
                     return boundaries
 
-                boundaries_pre_since_opened = calculate_outliers(reduced_data['pre_since_opened'])
-                is_outlier_pre_since_opened1 = (reduced_data.pre_since_opened < boundaries_pre_since_opened[0])
-                is_outlier_pre_since_opened2 = (reduced_data.pre_since_opened > boundaries_pre_since_opened[1])
+                features_type_change = ['pre_fterm',
+                                        'pre_till_fclose',
+                                        'pre_loans_credit_cost_rate', 'pre_util', 'enc_paym_5', 'enc_paym_6',
+                                        'enc_paym_7', 'enc_paym_8', 'enc_paym_9', 'enc_paym_10', 'enc_paym_11',
+                                        'enc_paym_12', 'enc_paym_13', 'enc_paym_14']
 
-                reduced_data.loc[is_outlier_pre_since_opened1, 'pre_since_opened'] = int(boundaries_pre_since_opened[0])
-                reduced_data.loc[is_outlier_pre_since_opened2, 'pre_since_opened'] = int(boundaries_pre_since_opened[1])
+                for i in range(len(features_type_change)):
+                    boundaries = calculate_outliers(reduced_data[features_type_change[i]])
+                    is_outlier_1 = (reduced_data[features_type_change[i]] < boundaries[0])
+                    is_outlier_2 = (reduced_data[features_type_change[i]] > boundaries[1])
+                    if len(is_outlier_1) == 0:
+                        reduced_data.loc[is_outlier_2, features_type_change[i]] = int(boundaries[1])
+                    elif(len(is_outlier_2) == 0):
+                        reduced_data.loc[is_outlier_1, features_type_change[i]] = int(boundaries[0])
+                    else:
+                        reduced_data.loc[is_outlier_1, features_type_change[i]] = int(boundaries[0])
+                        reduced_data.loc[is_outlier_2, features_type_change[i]] = int(boundaries[1])
 
+                #for i in range(len(features_type_change)):
+                 #   reduced_data[features_type_change[i]] = reduced_data[features_type_change[i]].astype('int')
 
-
-
-                # writing the prepared data to a file
+                # записываем подготовленные данные в файл
                 if save_to_path:
                     block_as_str = str(step)
                     if len(block_as_str) == 1:
