@@ -12,7 +12,7 @@ This work is devoted to predicting the probability of default of customers who t
 - Download the data files with client unformation.
   - You can find the data [here](https://drive.google.com/drive/folders/14npslKbipCFP5A9b-Tf46TUys6WaQgGY?usp=drive_link).
 ## Usage
-- Run `python uploading_script.py` to combine the create dataset for learning.
+- Run `python uploading_script.py` to create dataset for learning.
   - Data preprocessing is explained in notebooks : cleaning-credit_data.ipynb, EDA_credit_data.ipynb, modeling_default_prediction.ipynb
   - This will create prepared dara in the `processed` folder.
 -
