@@ -1,5 +1,5 @@
 ## Credit Risk Prediction
-This work is devoted to predicting the probability of default of customers who take out a loan. For banks, this task is very important, since it depends on whether the bank goes bankrupt or not.
+This work is devoted to predicting the probability of default of customers who take out a loan. The metric value on the test dataset must be at least 0.75 according to ROC-AUC. For banks, this task is very important, since it depends on whether the bank goes bankrupt or not.
 ## Installation 
 ### Download the data
 - Clone this repo to your computer.
