@@ -9,7 +9,7 @@ This work is devoted to predicting the probability of default of customers who t
 - Switch into the `target_data` directory using `cd target_data`.
 - Download the data files with targets [here](https://drive.google.com/file/d/1KNnfCT7OueH1gAYF68Bx03H6dLiI0pmu/view?usp=drive_link).
 - Run `../` to return in `Credit_risk` folder.
-- Download the data files with client unformation.
+- Download the data files with client information.
   - You can find the data [here](https://drive.google.com/drive/folders/14npslKbipCFP5A9b-Tf46TUys6WaQgGY?usp=drive_link).
 ## Usage
 - Run `python uploading_script.py` to create dataset for learning.
