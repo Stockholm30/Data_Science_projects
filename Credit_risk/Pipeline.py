@@ -11,6 +11,7 @@ import os
 
 
 from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import StackingClassifier
 from imblearn.over_sampling import RandomOverSampler
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.pipeline import Pipeline
@@ -62,7 +63,7 @@ def main():
                                                                  , num_parts_to_preprocess_at_once, columns=
                                                                      None , verbose=verbose)
 
-            # здесь должен быть препроцессинг данных
+            
 
                 agg_func_count_application = {
                               'pre_fterm':'mean',
@@ -113,7 +114,7 @@ def main():
                 for i in range(len(features_type_change)):
                     reduced_data[features_type_change[i]] = reduced_data[features_type_change[i]].astype('int')
 
-                # записываем подготовленные данные в файл
+                
                 if save_to_path:
                     block_as_str = str(step)
                     if len(block_as_str) == 1:
@@ -140,7 +141,7 @@ def main():
         X= sample_prepared[features]
         y = sample_prepared[target]
 
-        over = RandomOverSampler(sampling_strategy=0.8)
+        over = RandomOverSampler()
         X_resampled, y_resampled = over.fit_resample(X, y)
         X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3, random_state=42)
 
@@ -159,31 +160,20 @@ def main():
         preprocessor = ColumnTransformer(transformers=[
             ("num_transform", numeric_transformer, numeric_features)
         ])
-        pipe = Pipeline(steps=[("preprocesser", preprocessor), ("classifier", DecisionTreeClassifier())])
+        model_1 = KNeighborsClassifier(n_neighbors=3, weights ='distance')
+        model_2 = DecisionTreeClassifier()
+        model_3 = LogisticRegression()
+        model_4 = LinearSVC()
+        estimators = [('knn', model_1), ('dt', model_2), ('svc', model_4)]
+        modelClf = StackingClassifier(estimators=estimators, final_estimator=model_3, cv=5)
+        
+        pipe = Pipeline(steps=[("preprocesser", preprocessor), ("classifier", modelClf())])
         model =  pipe.fit(X_train, y_train)
         predicted_target = model.predict(X_test)
         score = roc_auc_score(predicted_target,y_test)
-        param_grid = [
-            {
-                "classifier__min_samples_leaf":  [2, 4, 10, 15],
-                "classifier__max_depth" : [2, 5, 15, 20],
-                'classifier__max_leaf_nodes': [100, 200, 300, 500, 10000]
-
-            }
-        ]
-
-        grid_search = GridSearchCV(pipe, param_grid, scoring='roc_auc',  cv=10, verbose=1, n_jobs=-1)
-        grid_search.fit(X_train, y_train)
-        if grid_search.best_score_ > score:
-            best_score = grid_search.best_score_
-            new_model = DecisionTreeClassifier(max_depth=20,max_leaf_nodes= 10000, min_samples_leaf= 2)
-            pipe = Pipeline(steps=[("preprocesser", preprocessor), ("classifier", new_model)])
-            model = pipe.fit(X_train, y_train)
-
-        else:
-            pipe= Pipeline(steps=[("preprocesser", preprocessor), ("classifier", DecisionTreeClassifier())])
-            model = pipe.fit(X_train, y_train)
-            best_score = score
+       
+        model = pipe.fit(X_train, y_train)
+        best_score = score
 
         with open('credit_risk_pipe.pkl', 'wb') as file:
             dill.dump({
